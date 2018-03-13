@@ -4,7 +4,7 @@ var express = require("express"),
 
 // Root page route
 router.get("/", function(req, res){
-   res.send("Hello world!");
+   res.render("index");
 });
 
 module.exports = router;
