@@ -1,10 +1,8 @@
 // Include needed packages
 var express    = require("express"),
     bodyParser = require("body-parser"),
+    request    = require("request"),
     app        = express();
-
-// Require dotenv to include needed global variables
-require("dotenv").config();
 
 // Include all needed routes
 var indexRoutes = require("./routes/index.js");
