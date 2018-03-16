@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-// Include needed routes
+// Tell express to use needed routes
 app.use(indexRoutes);
 
 // Start server and listen for request
