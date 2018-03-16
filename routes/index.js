@@ -1,10 +1,17 @@
 // Require needed packages
 var express = require("express"),
     router  = express.Router();
+    request = require("request");
 
 // Root page route
 router.get("/", function(req, res){
     res.render("index");
+});
+
+// Post route
+router.post("/", function(req, res) {
+    // Redirect to root page
+    res.redirect("/");
 });
 
 // SEARCH - Post route to search for and get all retrieve all local coffee shops in the searched area

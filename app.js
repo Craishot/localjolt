@@ -1,6 +1,7 @@
 // Include needed packages
 var express    = require("express"),
     bodyParser = require("body-parser"),
+    request    = require("request"),
     app        = express();
 
 // Include all needed routes
