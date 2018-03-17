@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 </head>
-<body>
+<body onload="getUserLoc()">
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-dark bg-dark">
         <div class="container-fluid">
@@ -33,9 +33,9 @@
                         </div>
                     </form>
                     <!-- Use my location form -->
-                    <form action="/" method="POST">
-                        <input id="lat" type="hidden" name="lat" value="">
-                        <input id="lng" type="hidden" name="lng" value="">
+                    <form id = "user-loc-form" action="/" method="POST">
+                        <input id="lat" type="hidden" name="lat" value="1">
+                        <input id="lng" type="hidden" name="lng" value="1">
                         <button class="btn btn-warning form-button"><i class="fa fa-crosshairs"></i> Use My Location</button>
                     </form>
                 </div >
@@ -47,16 +47,19 @@
                 </div>
             </div>
             <!-- CONTAINER FOR MAP DISPLAY -->
-            <div id="map-container" class="col-lg-8">
-                <iframe
-                        width="100%"
+                <div id="map-container" class="col-lg-8">
+                    <iframe
+                            width="100%"
                         height="100%"
                         frameborder="1" style="border:1px"
                         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDOThVc6AtcxxSFEGXc1gNXmHyqnivRzKM
                         &q=Space+Needle,Seattle+WA" allowfullscreen>
-                </iframe>
+                    </iframe>
             </div>
         </div>
     </div>
+
+    <!-- Include local JavaScript files -->
+    <script src="/javascript/geolocation.js"></script>
 </body>
 </html>
