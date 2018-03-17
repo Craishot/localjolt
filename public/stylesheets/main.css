@@ -1,0 +1,46 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    padding-top: 55px;
+}
+
+.form-button {
+    width: 100%;
+}
+
+#main-container {
+    height: 100%;
+    width: 100%;
+    display: block;
+    padding: 25px 25px;
+}
+
+#content-container {
+    height: 100%;
+}
+
+#search-form {
+    padding: 10px;
+    border: 2px rgba(200, 200, 200, .5) solid;
+}
+
+#result-content {
+    height: 690px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 2px rgba(200, 200, 200, .5) solid;
+    overflow: hidden;
+}
+
+#map-container {
+    height: 900px;
+}
+#brand {
+    font-weight: 700;
+}
