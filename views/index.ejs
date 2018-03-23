@@ -23,6 +23,7 @@
             <div id="content-container" class="col-xl-4 col-lg-6">
                 <!-- CONTAINER FOR SEARCH FORM -->
                 <div id="search-form">
+                    <!-- Custom location form -->
                     <form action="/" method="POST">
                         <div class="form-group">
                             <label for="location" style="font-weight: bold;">Location Search</label>
@@ -34,8 +35,8 @@
                     </form>
                     <!-- Use my location form -->
                     <form id = "user-loc-form" action="/" method="POST">
-                        <input id="lat" type="hidden" name="lat" value="1">
-                        <input id="lng" type="hidden" name="lng" value="1">
+                        <input id="lat" type="hidden" name="lat" value="">
+                        <input id="lng" type="hidden" name="lng" value="">
                         <button class="btn btn-warning form-button"><i class="fa fa-crosshairs"></i> Use My Location</button>
                     </form>
                 </div >
