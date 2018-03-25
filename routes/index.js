@@ -21,9 +21,11 @@ router.get("/", function(req, res){
 router.post("/", function(req, res) {
     // Get location data from from
     var customLocation = req.body.location;
+    var latitude, longitude;
 
     // Google API URL"s
     var googleGeocodingAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + customLocation + '&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc';
+    var googlePlacesAPI = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc&keyword=coffee&radius=500&location=';
 
     // Check if user is using a custom location or their current location
     if(!req.body.lat && !req.body.lng)
@@ -43,6 +45,10 @@ router.post("/", function(req, res) {
                 // Convert request to JSON format
                 var parsedGeocode = JSON.parse(body);
 
+                // Store geolocation coordinates in variables
+                // latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
+                // longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
+
                 // Print formatted address and lat/lng coordinates for debugging
                 console.log(parsedGeocode['results'][0]['formatted_address']);
                 console.log("Lat: " + parsedGeocode['results'][0]['geometry']['location']['lat']);
@@ -51,9 +57,16 @@ router.post("/", function(req, res) {
         });
     }
     else {
+        // Store users geolocation in variables
+        // latitude = req.body.lat;
+        // longitude = req.body.lng;
+
+        // Print users geolocation for debugging
         console.log("Latitude: " + req.body.lat);
         console.log("Longitude: " + req.body.lng);
     }
+
+    console.log(googlePlacesAPI + latitude + ',' + longitude);
 
     // Redirect to root page
     res.redirect("/");
