@@ -18,7 +18,7 @@ router.get("/", function(req, res){
 });
 
 // Route that handles getting information from Google API's and rendering HTML page to display local coffee shops
-router.post("/", function(req, res) {
+router.post("/customlocation", function(req, res) {
     // Get location data from from
     var customLocation = req.body.location;
     var latitude, longitude;
@@ -27,48 +27,43 @@ router.post("/", function(req, res) {
     var googleGeocodingAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + customLocation + '&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc';
     var googlePlacesAPI = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc&keyword=coffee&radius=500&location=';
 
-    // Check if user is using a custom location or their current location
-    if(!req.body.lat && !req.body.lng)
-    {
-        console.log("Were using a custom position!");
+    // Make request to the Google Places API
+    request(googleGeocodingAPI, function(error, response, body) {
+        // Check for error and good response code
+        if(!error && response.statusCode == 200) {
+            // Convert request to JSON format
+            var parsedGeocode = JSON.parse(body);
 
-        // Check that user has entered a location into the form
-        if(!req.body.location)
-        {
-            console.log("You cannot leave the location field blank!");
+            // Store geolocation coordinates in variables
+            // latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
+            // longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
+
+            // Print formatted address and lat/lng coordinates for debugging
+            console.log(parsedGeocode['results'][0]['formatted_address']);
+            console.log("Lat: " + parsedGeocode['results'][0]['geometry']['location']['lat']);
+            console.log("Lng: " + parsedGeocode['results'][0]['geometry']['location']['lng']);
         }
+    });
 
-        // Make request to the Google Places API
-        request(googleGeocodingAPI, function(error, response, body) {
-            // Check for error and good response code
-            if(!error && response.statusCode == 200) {
-                // Convert request to JSON format
-                var parsedGeocode = JSON.parse(body);
+    console.log(googlePlacesAPI + latitude + ',' + longitude);
 
-                // Store geolocation coordinates in variables
-                // latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
-                // longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
+    // Redirect to root page
+    res.redirect("/");
+});
 
-                // Print formatted address and lat/lng coordinates for debugging
-                console.log(parsedGeocode['results'][0]['formatted_address']);
-                console.log("Lat: " + parsedGeocode['results'][0]['geometry']['location']['lat']);
-                console.log("Lng: " + parsedGeocode['results'][0]['geometry']['location']['lng']);
-            }
-        });
+router.post("/userlocation", function(req, res) {
+
+    if(!req.body.lat && !req.body.lng) {
+        // Print error message (REFACTOR TO PRINT MESSAGE TO USER USING FLASH MESSAGES)
+        console.log("Something went wrong when getting the lat/lng coordinates...");
     }
     else {
-        // Store users geolocation in variables
-        // latitude = req.body.lat;
-        // longitude = req.body.lng;
-
         // Print users geolocation for debugging
         console.log("Latitude: " + req.body.lat);
         console.log("Longitude: " + req.body.lng);
     }
 
-    console.log(googlePlacesAPI + latitude + ',' + longitude);
-
-    // Redirect to root page
+    // Reload index page with updated information
     res.redirect("/");
 });
 
