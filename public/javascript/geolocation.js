@@ -1,5 +1,5 @@
 // PROGRAMMER: Trentin Gillis
-// DATE: March 17, 20187
+// DATE: March 17, 2018
 // VERSION: 1.0
 
 /*

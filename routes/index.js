@@ -11,6 +11,7 @@
 var express = require("express"),
     router  = express.Router();
     request = require("request");
+    coffee = require("../public/javascript/coffee");
 
 // Root page route
 router.get("/", function(req, res){
@@ -25,7 +26,6 @@ router.post("/customlocation", function(req, res) {
 
     // Google API URL"s
     var googleGeocodingAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + customLocation + '&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc';
-    var googlePlacesAPI = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc&keyword=coffee&radius=500&location=';
 
     // Make request to the Google Places API
     request(googleGeocodingAPI, function(error, response, body) {
@@ -35,32 +35,43 @@ router.post("/customlocation", function(req, res) {
             var parsedGeocode = JSON.parse(body);
 
             // Store geolocation coordinates in variables
-            // latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
-            // longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
+            latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
+            longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
 
             // Print formatted address and lat/lng coordinates for debugging
             console.log(parsedGeocode['results'][0]['formatted_address']);
             console.log("Lat: " + parsedGeocode['results'][0]['geometry']['location']['lat']);
             console.log("Lng: " + parsedGeocode['results'][0]['geometry']['location']['lng']);
+
+            // Use getCoffeeShops function from coffee.js to get coffee shops from Google Places API
+            coffee.getCoffeeShops(latitude, longitude);
         }
     });
-
-    console.log(googlePlacesAPI + latitude + ',' + longitude);
 
     // Redirect to root page
     res.redirect("/");
 });
 
 router.post("/userlocation", function(req, res) {
+    // Variables to store lat and lng coordinates
+    var latitude, longitude;
+
 
     if(!req.body.lat && !req.body.lng) {
         // Print error message (REFACTOR TO PRINT MESSAGE TO USER USING FLASH MESSAGES)
         console.log("Something went wrong when getting the lat/lng coordinates...");
     }
     else {
+        // Store users lat and lng coordinates
+        latitude = req.body.lat;
+        longitude = req.body.lng;
+
         // Print users geolocation for debugging
         console.log("Latitude: " + req.body.lat);
         console.log("Longitude: " + req.body.lng);
+
+        // User getCoffeeShops function from coffee.js to get coffee shops from Google Places API
+        coffee.getCoffeeShops(latitude, longitude);
     }
 
     // Reload index page with updated information
