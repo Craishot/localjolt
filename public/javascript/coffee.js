@@ -15,7 +15,7 @@ var exports = { };
 exports.getCoffeeShops = function(lat, lng, callback) {
     // Google Places API url with user defined lat and lng coordinates
     var googlePlacesAPI = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-        + lat + "," + lng + "&radius=2500&type=cafe&keyword=coffee&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc";
+        + lat + "," + lng + "&radius=5000&type=cafe&keyword=coffee&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc";
 
     // Variable that will be used to store all of the returned coffee shop data from the Google Places API
     var coffeeShops= "sad day";
@@ -64,4 +64,5 @@ function getLocalCoffeeShops(data) {
     return localCoffeeShops;
 }
 
+// Export needed functions
 module.exports = exports;

@@ -10,22 +10,26 @@
 // Require needed packages
 var express = require("express"),
     router  = express.Router();
-    request = require("request");
-    coffee = require("../public/javascript/coffee");
+    request = require("request"),
+    coffee = require("../public/javascript/coffee"),
+    MarkerWithLabel = require("markerwithlabel");
 
 // Variable to store all local coffee shop data
 var coffeeShops;
+
+// Variables to store lat and lng coordinates
+var latitude, longitude;
 
 // Root page route
 router.get("/", function(req, res){
     // Render ejs template depending of if there is data in the coffee shops variable
     if(coffeeShops) {
         console.log("Rendering with data...");
-        res.render("index", coffeeShops)
+        res.render("index", { coffeeShops: coffeeShops, latitude: latitude, longitude: longitude });
     }
     else {
         console.log("Rendering without data...");
-        res.render("index")
+        res.render("index", { coffeeShops: coffeeShops, latitude: latitude, longitude: longitude });
     }
 });
 
@@ -33,7 +37,6 @@ router.get("/", function(req, res){
 router.post("/customlocation", function(req, res) {
     // Get location data from from
     var customLocation = req.body.location;
-    var latitude, longitude;
 
     // Google API URL"s
     var googleGeocodingAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + customLocation + '&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc';
@@ -67,8 +70,6 @@ router.post("/customlocation", function(req, res) {
 });
 
 router.post("/userlocation", function(req, res) {
-    // Variables to store lat and lng coordinates
-    var latitude, longitude;
 
     if(!req.body.lat && !req.body.lng) {
         // Print error message (REFACTOR TO PRINT MESSAGE TO USER USING FLASH MESSAGES)

@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LocalJolt</title>
+    <!-- Include Bootstrap 4, custom css stylesheet, and font from Google Fonts -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <!-- Include bundle.js allowing for node like require statements client side -->
+    <script src="/javascript/bundle.js"></script>
 </head>
 <body onload="getUserLoc()">
     <!-- Navbar -->
@@ -44,23 +47,187 @@
                 <div id="result-content" class="bordered-content">
                     <h6 style="font-weight: 700;">Results</h6>
                     <hr>
-                    <ul></ul>
+                    <ol id="result-list">
+                        <% if(coffeeShops){ %>
+                            <% coffeeShops.forEach(function(coffeeShop) { %>
+                                <li>
+                                    <h5><%= coffeeShop["name"] %></h5>
+                                    <div><%= coffeeShop["vicinity"] %></div>
+                                    <div>Rating: <%= coffeeShop["rating"] %></div>
+                                    <hr>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <!-- do nothing -->
+                        <% } %>
+                    </ol>
                 </div>
             </div>
             <!-- CONTAINER FOR MAP DISPLAY -->
-                <div id="map-container" class="col-lg-8">
-                    <iframe
-                            width="100%"
-                        height="100%"
-                        frameborder="1" style="border:1px"
-                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDOThVc6AtcxxSFEGXc1gNXmHyqnivRzKM
-                        &q=Space+Needle,Seattle+WA" allowfullscreen>
-                    </iframe>
-            </div>
+            <div id="map" class="col-lg-8"></div>
         </div>
     </div>
 
+    <script>
+        // Function that creates and displays
+        function initMap() {
+            // Setup icon that will be used for coffee shop locations
+            var coffee_loc_icon = {
+                url: "/assets/map-marker-coffee.svg", // url
+                scaledSize: new google.maps.Size(30, 40), // scaled size
+                origin: new google.maps.Point(0,0), // origin
+                anchor: new google.maps.Point(0, 45) // anchor
+            };
+            //Setup icon that will be used for user location
+            var user_loc_icon = {
+                url: "/assets/map-marker-user.png", // url
+                scaledSize: new google.maps.Size(30, 40), // scaled size
+                origin: new google.maps.Point(0,0), // origin
+                anchor: new google.maps.Point(0, 45), // anchor
+            };
+
+            // Initialize Google Map in which all makers will be displayed
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center:
+                    <% if(latitude && longitude) { %>
+                        { lat: <%= latitude %>, lng: <%= longitude %> },
+                    <% } else { %>
+                        { lat: 47.610079, lng: -122.342487 },
+                    <% } %>
+                styles: [
+                    {
+                        "featureType": "administrative",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#444444"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "color": "#f2f2f2"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.business",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "saturation": -100
+                            },
+                            {
+                                "lightness": 45
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "visibility": "simplified"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.arterial",
+                        "elementType": "labels.icon",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "color": "#b4d4e1"
+                            },
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            // Require markerwithlabel package for easy creation of custom maker labels
+            var MarkerWithLabel = require("markerwithlabel")(google.maps);
+
+            // Load users position marker depending on their lat, lng coordinates. Place maker at default location during initial page load
+            var marker = new MarkerWithLabel({
+                position:
+                    <% if(latitude && longitude) { %>
+                        { lat: <%= latitude %>, lng: <%= longitude %> },
+                    <% } else { %>
+                        { lat: 47.610079, lng: -122.342487 },
+                    <% } %>
+                map: map,
+                icon: user_loc_icon,
+                animation: google.maps.Animation.DROP,
+                labelClass: "labels",
+                labelInBackground: false
+            });
+
+            // If coffee shop data is valid, place a maker at each local coffee shop loaction
+            <% if(coffeeShops) { %>
+                <%coffeeShops.forEach(function(coffeeShop) { %>
+                    // Create maker at coffee shop location (refactor to array later if we want to display info boxes)
+                    var marker = new MarkerWithLabel({
+                        position: new google.maps.LatLng(<%= coffeeShop["geometry"]["location"]["lat"] %>, <%= coffeeShop["geometry"]["location"]["lng"] %>),
+                        map: map,
+                        icon: coffee_loc_icon,
+                        animation: google.maps.Animation.DROP,
+                        labelContent: "<%= coffeeShop["name"] %>",
+                        labelClass: "labels",
+                        labelInBackground: false
+                    });
+                <% }); %>
+            <% } %>
+        }
+    </script>
+
     <!-- Include local JavaScript files -->
     <script src="/javascript/geolocation.js"></script>
+
+    <!-- Include Google Maps API script -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOThVc6AtcxxSFEGXc1gNXmHyqnivRzKM&callback=initMap">
+    </script>
 </body>
 </html>

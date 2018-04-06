@@ -1,3 +1,7 @@
+/* PROGRAMMER: Trentin Gillis */
+/* DATE: Apr 2, 2018 */
+/* VERSION: 1.0 */
+
 html {
     height: 100%;
     width: 100%;
@@ -12,6 +16,16 @@ body {
 
 .form-button {
     width: 100%;
+}
+
+.labels{
+    color: #333333;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 1;
+    pointer-events: none;
+    text-align: left;
+    white-space: nowrap;
 }
 
 #main-container {
@@ -35,12 +49,22 @@ body {
     margin: 10px auto;
     padding: 10px;
     border: 2px rgba(200, 200, 200, .5) solid;
-    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#result-list {
+    list-style: none;
 }
 
 #map-container {
     height: 900px;
 }
+
+#map {
+    width: 100%;
+    border: 2px rgba(200, 200, 200, .5) solid;
+}
+
 #brand {
     font-weight: 700;
 }
