@@ -13,9 +13,20 @@ var express = require("express"),
     request = require("request");
     coffee = require("../public/javascript/coffee");
 
+// Variable to store all local coffee shop data
+var coffeeShops;
+
 // Root page route
 router.get("/", function(req, res){
-    res.render("index");
+    // Render ejs template depending of if there is data in the coffee shops variable
+    if(coffeeShops) {
+        console.log("Rendering with data...");
+        res.render("index", coffeeShops)
+    }
+    else {
+        console.log("Rendering without data...");
+        res.render("index")
+    }
 });
 
 // Route that handles getting information from Google API's and rendering HTML page to display local coffee shops
@@ -44,18 +55,20 @@ router.post("/customlocation", function(req, res) {
             console.log("Lng: " + parsedGeocode['results'][0]['geometry']['location']['lng']);
 
             // Use getCoffeeShops function from coffee.js to get coffee shops from Google Places API
-            coffee.getCoffeeShops(latitude, longitude);
+            coffee.getCoffeeShops(latitude, longitude, function(data) {
+                // Update coffee shop variable with new information from Google Places API
+                coffeeShops = data;
+
+                // Redirect to the root page
+                res.redirect("/");
+            });
         }
     });
-
-    // Redirect to root page
-    res.redirect("/");
 });
 
 router.post("/userlocation", function(req, res) {
     // Variables to store lat and lng coordinates
     var latitude, longitude;
-
 
     if(!req.body.lat && !req.body.lng) {
         // Print error message (REFACTOR TO PRINT MESSAGE TO USER USING FLASH MESSAGES)
@@ -71,11 +84,14 @@ router.post("/userlocation", function(req, res) {
         console.log("Longitude: " + req.body.lng);
 
         // User getCoffeeShops function from coffee.js to get coffee shops from Google Places API
-        coffee.getCoffeeShops(latitude, longitude);
-    }
+        coffee.getCoffeeShops(latitude, longitude, function(data) {
+            // Update  coffeeShops variable with updated information from Google Places API
+            coffeeShops = data;
 
-    // Reload index page with updated information
-    res.redirect("/");
+            // Redirect to the root page
+            res.redirect("/");
+        });
+    }
 });
 
 // Export all index routes to main file

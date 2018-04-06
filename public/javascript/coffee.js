@@ -12,13 +12,13 @@ var request = require('request');
 var exports = { };
 
 // Function that makes request to Google Places text search API using passed in lat and lng coordinates
-exports.getCoffeeShops = function(lat, lng) {
+exports.getCoffeeShops = function(lat, lng, callback) {
     // Google Places API url with user defined lat and lng coordinates
     var googlePlacesAPI = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
         + lat + "," + lng + "&radius=2500&type=cafe&keyword=coffee&key=AIzaSyDbNh0OwL91LzF1NPRpA6L7kHMfFtZ7HEc";
 
     // Variable that will be used to store all of the returned coffee shop data from the Google Places API
-    var coffeeShops;
+    var coffeeShops= "sad day";
 
     // Make request to Google Places API
     request(googlePlacesAPI, function(error, response, body) {
@@ -34,7 +34,12 @@ exports.getCoffeeShops = function(lat, lng) {
                 console.log(coffeeShops["results"][i]["geometry"]["location"]["lat"]);
                 console.log(coffeeShops["results"][i]["geometry"]["location"]["lng"]);
             }
-        }
+        };
+
+        var localCoffeeShops = getLocalCoffeeShops(coffeeShops);
+
+        // Run specified callback function
+        return callback(localCoffeeShops);
     });
 };
 
@@ -44,18 +49,19 @@ function getLocalCoffeeShops(data) {
     var localCoffeeShops = [];
 
     // Loop through all coffee shops passed into the function
-    for(var i = 0; i < data.length; i++) {
-        // Check that current coffee shop is not a cooperate company
-        if(data[i]["name"] === "Starbucks")
-        {
-            // Do nothing
+    for(var i = 0; i < data["results"].length; i++) {
+        // Remove all starbucks from data set
+        if(data["results"][i]["name"] === "Starbucks") {
+            console.log("Starbucks removed from data set...");
         }
         else {
-            localCoffeeShops.push(data[i]);
+            console.log("Local coffee shop added to data set...");
+            localCoffeeShops.push(data["results"][i]);
         }
     }
 
-    console.log(localCoffeeShops);
+    // Return array containing coffee shops with all non-local coffee shops removed from the data set
+    return localCoffeeShops;
 }
 
 module.exports = exports;
