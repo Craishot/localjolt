@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "markerwithlabel": "^2.0.1",
     "nodemon": "^1.17.1",
+    "npm": "^5.8.0",
     "request": "^2.85.0"
   }
 }
