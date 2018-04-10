@@ -51,9 +51,19 @@
                         <% if(coffeeShops){ %>
                             <% coffeeShops.forEach(function(coffeeShop) { %>
                                 <li>
-                                    <h5><%= coffeeShop["name"] %></h5>
+                                    <h5 style="margin-bottom: 0"><%= coffeeShop["name"] %></h5>
                                     <div><%= coffeeShop["vicinity"] %></div>
-                                    <div>Rating: <%= coffeeShop["rating"] %></div>
+                                    <% var rating = 2 * Number(coffeeShop["rating"]); %>
+                                    <% for(var i = 1; i <= 10; i += 2) { %>
+                                        <% if(Math.round(rating) > i) { %>
+                                            <span class="rating-star"><i class="fa fa-star"></i></span>
+                                        <% } else if(Math.round(rating) === i) { %>
+                                            <span class="rating-star"><i class="fa fa-star-half-o"></i></span>
+                                        <% }  else { %>
+                                            <span class="rating-star"><i class="fa fa-star-o"></i></span>
+                                        <% } %>
+                                    <% } %>
+                                    <span><a class="btn btn-light btn-sm review-button" href="#"> Reviews</a></span>
                                     <hr>
                                 </li>
                             <% }); %>
