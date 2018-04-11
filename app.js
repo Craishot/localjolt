@@ -1,5 +1,5 @@
 // PROGRAMMER: Trentin Gillis
-// DATE: March 17, 20187
+// DATE: March 17, 2018
 // VERSION: 1.0
 
 /*
@@ -10,10 +10,14 @@
 // Include needed packages
 var express    = require("express"),
     bodyParser = require("body-parser"),
-    app        = express();
+    app        = express(),
+    mongoose   = require("mongoose");
 
 // Include all needed routes
 var indexRoutes = require("./routes/index.js");
+
+// Connect to local_jolt mongodb database
+mongoose.connect("mongodb://localhost/local_jolt");
 
 // Tell express what packages we are using
 app.set("view engine", "ejs");
