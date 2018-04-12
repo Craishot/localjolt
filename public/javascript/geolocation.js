@@ -11,7 +11,7 @@
 function getUserLoc() {
     // Use HTML5 geolocation to get lat and lng coordinates of user
     if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
     }
     else {
         console.log("Error obtaining location from user");
