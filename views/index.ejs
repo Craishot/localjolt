@@ -17,7 +17,7 @@
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-dark bg-dark">
         <div class="container-fluid">
-            <a id="brand" class="navbar-brand" href="#"><i class="fa fa-coffee"></i> LocalJolt</a>
+            <a id="brand" class="navbar-brand" href="/"><i class="fa fa-coffee"></i> LocalJolt</a>
         </div>
     </nav>
 
@@ -52,7 +52,7 @@
                             <% coffeeShops.forEach(function(coffeeShop) { %>
                                 <li>
                                     <h5 style="margin-bottom: 0"><%= coffeeShop["name"] %></h5>
-                                    <div><%= coffeeShop["vicinity"] %></div>
+                                    <div><%= coffeeShop["address"] %></div>
                                     <% var rating = 2 * Number(coffeeShop["rating"]); %>
                                     <% for(var i = 1; i <= 10; i += 2) { %>
                                         <% if(Math.round(rating) > i) { %>
@@ -63,7 +63,7 @@
                                             <span class="rating-star"><i class="fa fa-star-o"></i></span>
                                         <% } %>
                                     <% } %>
-                                    <span><a class="btn btn-light btn-sm review-button" href="#"> Reviews</a></span>
+                                    <span><a class="btn btn-light btn-sm review-button" href="/reviews/<%= coffeeShop["place_id"] %>"> Reviews</a></span>
                                     <hr>
                                 </li>
                             <% }); %>
@@ -219,7 +219,7 @@
                 <%coffeeShops.forEach(function(coffeeShop) { %>
                     // Create maker at coffee shop location (refactor to array later if we want to display info boxes)
                     var marker = new MarkerWithLabel({
-                        position: new google.maps.LatLng(<%= coffeeShop["geometry"]["location"]["lat"] %>, <%= coffeeShop["geometry"]["location"]["lng"] %>),
+                        position: new google.maps.LatLng(<%= coffeeShop["latitude"] %>, <%= coffeeShop["longitude"] %>),
                         map: map,
                         icon: coffee_loc_icon,
                         animation: google.maps.Animation.DROP,

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LocalJolt</title>
+    <!-- Include Bootstrap 4, custom css stylesheet, and font from Google Fonts -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <!-- Include bundle.js allowing for node like require statements client side -->
+    <script src="/javascript/bundle.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a id="brand" class="navbar-brand" href="/"><i class="fa fa-coffee"></i> LocalJolt</a>
+        </div>
+    </nav>
+
+    <!-- Reviews Display -->
+    <div id="main-container" class="container-fluid">
+        <div class="bordered-content">
+            <h2><%= reviewData["name"] %> Reviews
+                <span>   |   </span>
+                <% var rating = 2 * Number(reviewData["rating"]); %>
+                <% for(var i = 1; i <= 10; i += 2) { %>
+                    <% if(Math.round(rating) > i) { %>
+                        <span class="rating-star"><i class="fa fa-star"></i></span>
+                    <% } else if(Math.round(rating) === i) { %>
+                        <span class="rating-star"><i class="fa fa-star-half-o"></i></span>
+                    <% }  else { %>
+                        <span class="rating-star"><i class="fa fa-star-o"></i></span>
+                    <% } %>
+                <% } %>
+                <%= reviewData["rating"] %>
+                </h2>
+            <hr>
+            <ol id="result-list">
+                <% if(reviewData["reviews"]) { %>
+                    <% reviewData["reviews"].forEach(function(review) { %>
+                        <li>
+                            <h5>
+                                <%= review["author_name"] %>
+                                |
+                                <% var rating = 1 + Number(reviewData["rating"]); %>
+                                <% for(var i = 1; i <= 5; i += 1) { %>
+                                    <% if(Math.round(rating) > i) { %>
+                                        <span class="rating-star"><i class="fa fa-star"></i></span>
+                                    <% }  else { %>
+                                        <span class="rating-star"><i class="fa fa-star-o"></i></span>
+                                    <% } %>
+                                <% } %>
+                            </h5>
+                            <p><%= review["text"] %></p>
+                            <p style="font-size: .85em"><%= review["relative_time_description"] %></p>
+                        </li>
+                        <hr>
+                    <% }) %>
+                <% } %>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

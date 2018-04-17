@@ -8,11 +8,11 @@
 */
 
 // Require needed packages
-var express = require("express"),
-    router  = express.Router();
-    request = require("request"),
-    coffee = require("../public/javascript/coffee"),
-    MarkerWithLabel = require("markerwithlabel");
+const express = require("express"),
+      router  = express.Router();
+      request = require("request"),
+      coffee = require("../public/javascript/coffee"),
+      MarkerWithLabel = require("markerwithlabel");
 
 // Variable to store all local coffee shop data
 var coffeeShops;
@@ -49,13 +49,12 @@ router.post("/customlocation", function(req, res) {
             var parsedGeocode = JSON.parse(body);
 
             // Store geolocation coordinates in variables
-            latitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lat']);
-            longitude = JSON.stringify(parsedGeocode['results'][0]['geometry']['location']['lng']);
+            latitude = parsedGeocode['results'][0]['geometry']['location']['lat'];
+            longitude = parsedGeocode['results'][0]['geometry']['location']['lng'];
 
             // Print formatted address and lat/lng coordinates for debugging
+            console.log("User Location: ");
             console.log(parsedGeocode['results'][0]['formatted_address']);
-            console.log("Lat: " + parsedGeocode['results'][0]['geometry']['location']['lat']);
-            console.log("Lng: " + parsedGeocode['results'][0]['geometry']['location']['lng']);
 
             // Use getCoffeeShops function from coffee.js to get coffee shops from Google Places API
             coffee.getCoffeeShops(latitude, longitude, function(data) {

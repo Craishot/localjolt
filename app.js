@@ -8,16 +8,13 @@
 */
 
 // Include needed packages
-var express    = require("express"),
-    bodyParser = require("body-parser"),
-    app        = express(),
-    mongoose   = require("mongoose");
+const express    = require("express"),
+      bodyParser = require("body-parser"),
+      app        = express();
 
 // Include all needed routes
-var indexRoutes = require("./routes/index.js");
-
-// Connect to local_jolt mongodb database
-mongoose.connect("mongodb://localhost/local_jolt");
+const indexRoutes = require("./routes/index.js"),
+      reviewRoutes = require("./routes/reviews.js");
 
 // Tell express what packages we are using
 app.set("view engine", "ejs");
@@ -26,6 +23,7 @@ app.use(express.static(__dirname + "/public"));
 
 // Tell express to use needed routes
 app.use(indexRoutes);
+app.use(reviewRoutes);
 
 // Start server and listen for request
 app.listen(3000, function() {
