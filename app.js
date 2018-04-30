@@ -23,13 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 app.use(session({
-    cookie: {
-        maxAge: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000))
-    },
-    secret: 'ucomp123',
+    secret: 'keyboard cat',
     resave: false,
-    name: "ucompany",
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: true }
 }));
 
 // Tell express to use included route files
