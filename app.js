@@ -26,6 +26,6 @@ app.use(indexRoutes);
 app.use(reviewRoutes);
 
 // Start server and listen for request on localhost:3000
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
    console.log("LocalJolt Server Started...");
 });
