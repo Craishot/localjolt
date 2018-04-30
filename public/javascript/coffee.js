@@ -14,7 +14,8 @@ const request = require('request');
 var corporateCoffeeShops = [
     "Starbucks",
     "Dunkin' Donuts",
-    "Dutch Bros"
+    "Dutch Bros",
+    "McDonald's"
 ];
 
 // Create object for exporting of functions for use in other files

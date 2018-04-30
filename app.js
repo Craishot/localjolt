@@ -9,6 +9,7 @@
 
 // Include needed packages
 const express    = require("express"),
+      session    = require("express-session"),
       bodyParser = require("body-parser"),
       app        = express();
 
@@ -20,6 +21,16 @@ const indexRoutes = require("./routes/index.js"),
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+
+app.use(session({
+    cookie: {
+        maxAge: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000))
+    },
+    secret: 'ucomp123',
+    resave: false,
+    name: "ucompany",
+    saveUninitialized: true
+}));
 
 // Tell express to use included route files
 app.use(indexRoutes);
