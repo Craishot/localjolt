@@ -1,5 +1,5 @@
 // PROGRAMMER: Trentin Gillis
-// DATE: March 17, 2018
+// DATE (LAST UPDATED): March 17, 2018
 // VERSION: 1.0
 
 /*
@@ -7,7 +7,7 @@
 *  perform user location retrieval. Currently the function is called when the body is loaded on the index page.
 */
 
-// Function to get users geolocation
+// Function to get users geolocation using HTML5 geolocation features
 function getUserLoc() {
     // Use HTML5 geolocation to get lat and lng coordinates of user
     if(navigator.geolocation) {
@@ -29,7 +29,7 @@ function onSuccess (position) {
     lngInput.value = position.coords.longitude;
 }
 
-// Function to print error message when getting users geo location is not successful
+// Function to print error message if getting users geo location is not successful
 function onError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
